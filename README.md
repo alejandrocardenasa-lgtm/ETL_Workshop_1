@@ -289,5 +289,4 @@ Recruitment Analytics Dashboard
    5. Execute the SQL script in sql/create_tables.sql to create the Data Warehouse schema.
    6. Connect Tableau to the MySQL database dw_candidates.
 
-Author: Gonoalejo
-Data Engineering and AI Intelligence  
+# Author: Gonoalejo
