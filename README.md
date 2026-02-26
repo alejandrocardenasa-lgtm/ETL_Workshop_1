@@ -172,12 +172,12 @@ hired_flag
 The fact table stores measurable values and connects to each dimension using foreign keys.
 
 ## 8. ETL Process
-Extract
+- Extract
 
 The raw CSV file was loaded using pandas with the correct delimiter (sep=";").
 Column names were inspected and verified before transformation.
 
-Transform
+- Transform
 
 The transformation phase addressed the issues identified during EDA.
 
@@ -201,7 +201,7 @@ Generated surrogate keys for all dimension tables
 
 Ensured no null foreign keys in fact table
 
-Load
+- Load
 
 In the load phase, the transformed data was inserted into the MySQL Data Warehouse (dw_candidates).
 
