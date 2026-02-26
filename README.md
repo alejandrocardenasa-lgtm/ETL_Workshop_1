@@ -1,13 +1,13 @@
-ETL Workshop 1 – Candidates Data Warehouse
+# ETL Workshop 1 – Candidates Data Warehouse
 
-1. Project Overview
+## 1. Project Overview
 
 This project implements a complete ETL process to build a Data Warehouse for candidate applications.
 The objective was to extract raw data from a CSV file, perform data quality validations and transformations, design a dimensional model using a Star Schema, and load the data into a structured analytical model.
 
 The final result supports business analysis such as hiring performance, technology demand, and application trends over time.
 
-2. Dataset Description
+## 2. Dataset Description
 
 The raw dataset (candidates.csv) contains information about candidate applications, including:
 
@@ -33,7 +33,7 @@ Technical Interview Score
 
 Each row represents one job application submitted by a candidate.
 
-3. Exploratory Data Analysis (EDA – Raw Data)
+## 3. Exploratory Data Analysis (EDA – Raw Data)
 
 An exploratory data analysis was performed on the raw dataset before applying any transformations.
 
@@ -57,7 +57,7 @@ Date format inspection
 
 Distribution analysis using histograms
 
-4. Data Quality Findings
+## 4. Data Quality Findings
 
 The raw dataset presented the following characteristics:
 
@@ -77,8 +77,7 @@ Categorical fields required standardization (case and spacing).
 
 These findings guided the transformation phase.
 
-
-5. Dimensional Modeling – Star Schema
+## 5. Dimensional Modeling – Star Schema
 
 A Star Schema was designed to organize the Data Warehouse.
 
@@ -100,7 +99,7 @@ Dimension tables store descriptive attributes, while the fact table stores measu
 
 Surrogate keys were implemented to ensure stable relationships and avoid dependency on natural keys from the raw dataset.
 
-6. Grain Definition
+## 6. Grain Definition
 
 The grain of the fact table is:
 
@@ -112,7 +111,7 @@ Since a candidate can apply multiple times, the level of detail is the applicati
 
 Defining the grain clearly ensures consistent aggregations and avoids ambiguity.
 
-7. Tables Structure
+## 7. Tables Structure
 
 Dimension Tables
 
@@ -172,7 +171,7 @@ hired_flag
 
 The fact table stores measurable values and connects to each dimension using foreign keys.
 
-8. ETL Process
+## 8. ETL Process
 Extract
 
 The raw CSV file was loaded using pandas with the correct delimiter (sep=";").
@@ -222,7 +221,7 @@ fact_applications
 
 After loading, a basic validation was performed to confirm that all foreign keys in the fact table correctly reference existing dimension records.
 
-9. SQL Implementation
+## 9. SQL Implementation
 
 SQL scripts were created to generate the Data Warehouse tables in MySQL.
 
@@ -232,7 +231,7 @@ The Data Warehouse database used was:
 
 dw_candidates
 
-10. Tableau Integration
+## 10. Tableau Integration
 
 To connect Tableau on macOS to MySQL:
 
@@ -258,7 +257,7 @@ KPIs created include:
 - Total Hires by Seniority: Analyzes hiring distribution across experience groups.
 - Average Technical Interview Score (Hired) by Year: Assesses the technical quality of hired candidates and consistency of hiring standards over time.
 
-11. Example Outputs
+## 11. Example Outputs
 
 The following examples illustrate analytical results generated from the Data Warehouse:
 
@@ -280,15 +279,15 @@ Average Technical Interview Score (Hired) by Year
 Recruitment Analytics Dashboard
 ![Recruitment Analytics Dashboard](visualizations/Recruitment_Analytics_Dashboard.png)
 
-12. How to Run the Project
+## 12. How to Run the Project
 
-1. Clone the repository.
-2. Install required Python dependencies.
-3. Place the raw CSV file in the data/raw folder.
-4. Run the ETL pipeline using:
-   python src/main.py
-5. Execute the SQL script in sql/create_tables.sql to create the Data Warehouse schema.
-6. Connect Tableau to the MySQL database dw_candidates.
+   1. Clone the repository.
+   2. Install required Python dependencies.
+   3. Place the raw CSV file in the data/raw folder.
+   4. Run the ETL pipeline using:
+      python src/main.py
+   5. Execute the SQL script in sql/create_tables.sql to create the Data Warehouse schema.
+   6. Connect Tableau to the MySQL database dw_candidates.
 
 Author: Gonoalejo
 Data Engineering and AI Intelligence  
