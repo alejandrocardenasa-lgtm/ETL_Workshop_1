@@ -103,13 +103,11 @@ Surrogate keys were implemented to ensure stable relationships and avoid depende
 
 The grain of the fact table is:
 
-One row per candidate application.
+Each row represents an individual application of a candidate to a selection process.
 
-Each record represents a single application submitted by a candidate on a specific date, associated with a specific technology and seniority level.
+The grain is an individual application, because each row represents when a candidate applies to a selection process.
 
-Since a candidate can apply multiple times, the level of detail is the application, not the candidate.
-
-Defining the grain clearly ensures consistent aggregations and avoids ambiguity.
+Since the same candidate can apply multiple times, the level of detail is not the candidate itself, but each individual application.
 
 ## 7. Tables Structure
 
