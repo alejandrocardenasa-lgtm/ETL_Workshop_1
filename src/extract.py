@@ -1,10 +1,5 @@
 import pandas as pd
- 
-"""
-Extract Phase:
- - Load CSV file
- - Validate data types
- """
+
 def extract(file_path):
     # Load CSV
     df = pd.read_csv(file_path, sep=";")

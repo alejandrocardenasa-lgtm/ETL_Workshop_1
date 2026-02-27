@@ -4,34 +4,44 @@ def transform(df: pd.DataFrame):
 
     df = df.copy()
 
+    # Create hired_flag: 1 if both scores >= 7, otherwise 0
     df["hired_flag"] = (
         (df["Code Challenge Score"] >= 7) &
         (df["Technical Interview Score"] >= 7)
     ).astype(int)
 
+    # Clean and validate Email
     df["Email"] = df["Email"].astype(str).str.strip()
     df = df[df["Email"].notna() & (df["Email"] != "")]
     df = df[df["Application Date"].notna()]
 
+    # Standardize text columns
     df["First Name"] = df["First Name"].astype(str).str.strip().str.title()
     df["Last Name"] = df["Last Name"].astype(str).str.strip().str.title()
     df["Country"] = df["Country"].astype(str).str.strip().str.upper()
     df["Seniority"] = df["Seniority"].astype(str).str.strip().str.title()
     df["Technology"] = df["Technology"].astype(str).str.strip().str.title()
 
+    # Convert numeric columns and handle invalid values
     df["YOE"] = pd.to_numeric(df["YOE"], errors="coerce").fillna(0).astype(int)
     df["Code Challenge Score"] = pd.to_numeric(df["Code Challenge Score"], errors="coerce").fillna(0).astype(float)
     df["Technical Interview Score"] = pd.to_numeric(df["Technical Interview Score"], errors="coerce").fillna(0).astype(float)
 
+    # Remove duplicated applications
     df = df.drop_duplicates(subset=["Email", "Application Date", "Seniority", "Technology"])
 
+     # Create dim_candidate
     dim_candidate = (
         df[["First Name", "Last Name", "Email", "Country"]]
         .drop_duplicates(subset=["Email"])
         .sort_values("Email")
         .reset_index(drop=True)
     )
+
+     # Generate surrogate key
     dim_candidate["candidate_key"] = dim_candidate.index + 1
+
+    # Rename columns and reorder
     dim_candidate = dim_candidate.rename(
         columns={
             "First Name": "first_name",
@@ -48,6 +58,7 @@ def transform(df: pd.DataFrame):
         .sort_values("full_date")
         .reset_index(drop=True)
     )
+    # Create date_key (YYYYMMDD format)
     dim_date["date_key"] = dim_date["full_date"].dt.strftime("%Y%m%d").astype(int)
     dim_date["year"] = dim_date["full_date"].dt.year
     dim_date["month"] = dim_date["full_date"].dt.month
@@ -74,6 +85,7 @@ def transform(df: pd.DataFrame):
     dim_technology["technology_key"] = dim_technology.index + 1
     dim_technology = dim_technology[["technology_key", "technology"]]
 
+    # Create fact table
     fact = df.rename(
         columns={
             "Email": "email",
@@ -97,13 +109,16 @@ def transform(df: pd.DataFrame):
         ]
     ].copy()
 
+    # Create date_key for fact table
     fact["date_key"] = fact["application_date"].dt.strftime("%Y%m%d").astype(int)
     fact = fact.drop(columns=["application_date"])
 
+    # Join fact table with dimensions (replace natural keys with surrogate keys)
     fact = fact.merge(dim_candidate[["candidate_key", "email"]], on="email", how="left")
     fact = fact.merge(dim_seniority, on="seniority", how="left")
     fact = fact.merge(dim_technology, on="technology", how="left")
 
+    # Select final fact structure
     fact_applications = fact[
         [
             "candidate_key",
